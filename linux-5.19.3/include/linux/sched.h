@@ -45,6 +45,7 @@ struct bpf_local_storage;
 struct bpf_run_ctx;
 struct capture_control;
 struct cfs_rq;
+struct comp3520_rq;
 struct fs_struct;
 struct futex_pi_state;
 struct io_context;
@@ -533,6 +534,14 @@ struct sched_statistics {
 #endif /* CONFIG_SCHEDSTATS */
 } ____cacheline_aligned;
 
+struct comp3520_sched_entity {
+	struct list_head run_list;
+	bool on_rq;
+
+	// Don't worry about this
+	struct sched_statistics statistics;
+};
+
 struct sched_entity {
 	/* For load-balancing: */
 	struct load_weight		load;
@@ -774,6 +783,7 @@ struct task_struct {
 	int				normal_prio;
 	unsigned int			rt_priority;
 
+	struct comp3520_sched_entity comp3520_se;
 	struct sched_entity		se;
 	struct sched_rt_entity		rt;
 	struct sched_dl_entity		dl;
