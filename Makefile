@@ -40,7 +40,7 @@ qemu-busybox-debug: linux initramfs .inited
 	(cd build && qemu-system-x86_64 -nographic -kernel bzImage -initrd busybox_initramfs.cpio.gz -append "init=/bin/sh nokaslr console=ttyS0" -s -S)
 
 qemu-ubu: vm.qcow2
-	qemu-system-x86_64 -cpu host -smp cores=6, -m 2G vm.qcow2 -nographic\
+	qemu-system-x86_64 -smp cores=2, -m 2G vm.qcow2 -nographic\
 		-device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::5555-:22
 
 qemu-ubu-custom-kern: linux .inited
