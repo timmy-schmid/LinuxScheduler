@@ -39,12 +39,12 @@ qemu-busybox: linux initramfs .inited
 qemu-busybox-debug: linux initramfs .inited
 	(cd build && qemu-system-x86_64 -nographic -kernel bzImage -initrd busybox_initramfs.cpio.gz -append "init=/bin/sh nokaslr console=ttyS0" -s -S)
 
-qemu-fed: fedora34.qcow2
-	qemu-system-x86_64 -cpu host -smp cores=6, -m 2G fedora34.qcow2 -nographic\
+qemu-ubu: vm.qcow2
+	qemu-system-x86_64 -cpu host -smp cores=6, -m 2G vm.qcow2 -nographic\
 		-device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::5555-:22
 
-qemu-fed-custom-kern: linux .inited
-	qemu-system-x86_64 -kernel build/bzImage -m 2G -drive file=fedora34.qcow2,if=virtio\
+qemu-ubu-custom-kern: linux .inited
+	qemu-system-x86_64 -kernel build/bzImage -m 2G -drive file=vm.qcow2,if=virtio\
 		-append "root=/dev/vda3 ro console=tty0 rd_NO_PLYMOUTH console=ttyS0,115200" -nographic
 
 help:
