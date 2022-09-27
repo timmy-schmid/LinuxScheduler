@@ -31,7 +31,7 @@ initramfs: init.sh
 linux:
 	mkdir -p build
 	$(MAKE) -C $(LINUX)  -j`nproc`
-	mv $(LINUX)/arch/x86/boot/bzImage build
+	cp $(LINUX)/arch/x86/boot/bzImage build
 
 qemu-busybox: linux initramfs .inited
 	(cd build && qemu-system-x86_64 -nographic -kernel bzImage -initrd busybox_initramfs.cpio.gz -append "console=ttyS0")
@@ -39,14 +39,13 @@ qemu-busybox: linux initramfs .inited
 qemu-busybox-debug: linux initramfs .inited
 	(cd build && qemu-system-x86_64 -nographic -kernel bzImage -initrd busybox_initramfs.cpio.gz -append "init=/bin/sh nokaslr console=ttyS0" -s -S)
 
-qemu-ubu: vm.qcow2
-	qemu-system-x86_64 -smp cores=2, -m 2G vm.qcow2 -nographic\
+qemu-deb: deb.qcow2
+	qemu-system-x86_64 -m 2G deb.qcow2 -nographic\
 		-device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::5555-:22
 
-qemu-ubu-custom-kern: linux .inited
-	qemu-system-x86_64 -kernel build/bzImage -m 2G -drive file=vm.qcow2,if=virtio\
-		-append "root=/dev/vda3 ro console=tty0 rd_NO_PLYMOUTH console=ttyS0,115200" -nographic
-
+qemu-deb-custom-kern: linux .inited deb.qcow2
+	qemu-system-x86_64 -kernel build/bzImage -m 2G -drive file=deb.qcow2,if=virtio\
+		-append "root=/dev/vda1 console=tty0 rd_NO_PLYMOUTH console=ttyS0,115200" -nographic
 help:
 	$(info ==========Build things for COMP3520 assignment 1==========)
 	$(info init: builds busybox and linux, mainly a check to see if you've configured both of them.)
