@@ -49,7 +49,6 @@ static void dequeue_task_comp3520(struct rq *rq, struct task_struct *p,
     rq->comp3520_rq.nr_running--;
     sub_nr_running(rq, 1);
     se->on_rq = false;
-
 }
 
 // TODO: Complete me
@@ -79,10 +78,10 @@ static void task_tick_comp3520(struct rq *rq, struct task_struct *curr,
     se->time_slice = TIMESLICE;
     struct list_head *queue = &rq->comp3520_rq.queue;
     if (se->run_list.prev != se->run_list.next) {
-            if (se->on_rq) {
-                list_move_tail(&se->run_list, queue);
-            }
-			resched_curr(rq);
+        if (se->on_rq) {
+            list_move_tail(&se->run_list, queue);
+        }
+        resched_curr(rq);
     }
 }
 
@@ -94,7 +93,9 @@ struct task_struct *pick_next_task_comp3520(struct rq *rq)
         return NULL;
     }
 
-    struct comp3520_sched_entity *next = list_entry(queue->next, struct comp3520_sched_entity,run_list);
+    struct comp3520_sched_entity *next = list_entry(queue->next,
+                                        struct comp3520_sched_entity,run_list);
+
     struct task_struct *next_task = comp3520_task_of(next);
 	return comp3520_task_of(next);
 }
