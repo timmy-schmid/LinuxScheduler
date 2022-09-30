@@ -17,6 +17,7 @@ static inline struct task_struct * comp3520_task_of(struct comp3520_sched_entity
 static void enqueue_task_comp3520(struct rq *rq, struct task_struct *p,
 				  int flags)
 {
+    
     //printk ("ENQUEUE_TASK_COMP3520\n"); 
     struct list_head *queue = &rq->comp3520_rq.queue;
     struct comp3520_sched_entity *se = &p->comp3520_se;
