@@ -5,7 +5,7 @@
 const struct sched_class comp3520_sched_class;
 
 //100ms for HZ = 100 in Arm. 100 * HZ / 1000
-#define TIMESLICE (1)
+#define TIMESLICE (10)
 
 // DONE
 static inline struct task_struct * comp3520_task_of(struct comp3520_sched_entity *se)
@@ -17,7 +17,7 @@ static inline struct task_struct * comp3520_task_of(struct comp3520_sched_entity
 static void enqueue_task_comp3520(struct rq *rq, struct task_struct *p,
 				  int flags)
 {
-    
+
     //printk ("ENQUEUE_TASK_COMP3520\n"); 
     struct list_head *queue = &rq->comp3520_rq.queue;
     struct comp3520_sched_entity *se = &p->comp3520_se;
@@ -127,10 +127,10 @@ static void task_tick_comp3520(struct rq *rq, struct task_struct *curr,
     struct list_head *position = NULL ; 
     struct comp3520_sched_entity  *entity  = NULL ;
     int i = 1;
-    printk ("current run_list queue of se after tick\n"); 
+    //printk ("current run_list queue of se after tick\n"); 
     list_for_each (position , queue) { 
          entity = list_entry(position, struct comp3520_sched_entity,run_list);
-         printk ("-%d | %px | PID:%d \n",i,entity, comp3520_task_of(entity)->pid); 
+         //printk ("-%d | %px | PID:%d \n",i,entity, comp3520_task_of(entity)->pid); 
          i++;
     }
     //u64 now = rq->clock_task;
@@ -172,6 +172,11 @@ void put_prev_task_comp3520(struct rq *rq, struct task_struct *prev) {
 void prio_changed_comp3520(struct rq *rq, struct task_struct *task, int oldprio) {
 }
 
+// Required by core.c
+void update_curr_comp3520(struct rq *rq) {
+}
+
+
 const struct sched_class
 	comp3520_sched_class __section("__comp3520_sched_class") = {
 		.enqueue_task = enqueue_task_comp3520,
@@ -183,6 +188,8 @@ const struct sched_class
 		.pick_next_task = pick_next_task_comp3520,
         .put_prev_task = put_prev_task_comp3520,
         .prio_changed = prio_changed_comp3520,
+        .update_curr = update_curr_comp3520,
+        
 
 #ifdef CONFIG_SMP
 		.balance = balance_comp3520,
@@ -210,6 +217,7 @@ void init_comp3520_rq(struct comp3520_rq *comp3520_rq)
     INIT_LIST_HEAD(&comp3520_rq->queue);
     //printk ("printing queue head: %px\n",comp3520_rq->queue); 
 }
+
 
 #ifdef CONFIG_SCHED_DEBUG
 extern void print_comp3520_stats(struct seq_file *m, int cpu);
