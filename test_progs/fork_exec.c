@@ -10,7 +10,8 @@ int main() {
 		perror("Fork failed");
 		return -1;
 	} else if (pid == 0) {
-		char *args[] = { "/bin/echo", "Hello from the child!" };
+		puts("EXEC CALL STARTS HERE");
+		char *args[] = { "/bin/echo", "Hello from the child!",NULL };
 		execv("/bin/echo", args);
 	} else {
 		puts("Hello from the parent!");

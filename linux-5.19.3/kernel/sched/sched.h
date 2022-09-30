@@ -521,6 +521,8 @@ struct cfs_bandwidth { };
 #endif	/* CONFIG_CGROUP_SCHED */
 
 struct comp3520_rq {
+    struct list_head queue;
+    unsigned int nr_running;
 };
 
 /* CFS-related fields in a runqueue */

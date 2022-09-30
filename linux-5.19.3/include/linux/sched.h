@@ -537,7 +537,8 @@ struct sched_statistics {
 struct comp3520_sched_entity {
 	struct list_head run_list;
 	bool on_rq;
-
+	unsigned int time_slice;
+    
 	// Don't worry about this
 	struct sched_statistics statistics;
 };
@@ -549,7 +550,7 @@ struct sched_entity {
 	struct list_head		group_node;
 	unsigned int			on_rq;
 
-	u64				exec_start;
+	u64             exec_start;
 	u64				sum_exec_runtime;
 	u64				vruntime;
 	u64				prev_sum_exec_runtime;
